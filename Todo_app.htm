@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 align="center"> Todo Application </h1>
+    <div class="container mt-4">
+        <form>
+            <div class="form-group">
+                <input type="text" id="task" class="form-control" />
+            </div>
+
+            <button class="btn btn-secondary" onclick="saveData(event)"> save Data </button>
+        </form>
+
+        <table class="table shadow  mt-3">
+            <thead>
+                <tr>
+                    <th> sr no </th>
+                    <th>Task Title</th>
+                    <th> Action</th>
+
+                </tr>
+            </thead>
+            <tbody id="display">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        displayData()
+        function saveData(event) {
+            event.preventDefault();
+
+            var task = document.getElementById('task').value;
+            var obj = { id: new Date().getTime().toString(), title: task };
+            var taskArr = JSON.parse(localStorage.getItem("mytasks")) || [];
+
+            taskArr.push(obj);
+
+            localStorage.setItem('mytasks', JSON.stringify(taskArr));
+            document.getElementById('task').value = ''
+            displayData()
+        }
+
+        function displayData() {
+
+            var taskArr = JSON.parse(localStorage.getItem('mytasks'));
+
+            var ele = document.getElementById('display');
+            ele.innerHTML=''
+            var html='';
+            taskArr.forEach((obj,i) => {
+
+                html = html+`
+  
+  <tr>
+    <td> ${++i} </td>
+    <td>${obj.title}  </td> 
+    <td><button class='btn btn-success'> EDIT </button>
+        <button class='btn btn-danger'> Delete </button>  </td> 
+
+    </tr>
+  
+  `
+            })
+
+            ele.insertAdjacentHTML('beforeend',html)
+
+        }
+
+    </script>
+
+</body>
+
+</html>
